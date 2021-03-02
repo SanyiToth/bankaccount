@@ -18,15 +18,29 @@ export class BankAccount {
         return this.#owner
     }
 
+    get money() {
+        return this.#money
+    }
+
+    set money(amount) {
+        this.#money = amount
+
+    }
+
     get transactionHistory() {
         return this.#transactionHistory
     }
 
-    showBalance() {
-        return this.#money
+    get backup() {
+        return this.backupAccount;
     }
 
-    setPin(currentPin) {
+    set backup(account) {
+        this.backupAccount = account;
+
+    }
+
+    set pin(currentPin) {
         if (currentPin === this.#pin && !this.isAccountToLocked()) {
             this.#countIncorrectPin = 0;
             let newPin = window.prompt("new pin")
@@ -40,6 +54,12 @@ export class BankAccount {
             throw TypeError("BankAccount locks down")
         }
     }
+
+
+    showBalance() {
+        return this.#money
+    }
+
 
     isAccountToLocked() {
         return this.#countIncorrectPin > 3;
@@ -60,8 +80,7 @@ export class BankAccount {
             date: new Date()
         }
         this.#transactionHistory.push(newTransaction)
-        return this.#money = this.#money - amount
-
+        this.#money = this.#money - amount
     }
 
     deposit(amount) {
@@ -71,12 +90,22 @@ export class BankAccount {
             date: new Date()
         }
         this.#transactionHistory.push(newTransaction)
-        return this.#money = this.#money + amount
+        this.#money = this.#money + amount
     }
 
-    transferToBackupAccount(amount) {
+    transfer() {
+        let different = this.backup.money - this.money
+        if (this.money < 0 && this.backup.money >= different) {
+            let newTransaction = {
+                action: "transfer",
+                amount: different,
+                date: new Date()
+            }
+            this.#transactionHistory.push(newTransaction)
+            this.backup.#money = this.backup.money - this.money
+            this.#money = 0
+        }
 
-        
     }
 
 
