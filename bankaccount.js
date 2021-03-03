@@ -1,86 +1,71 @@
 export class BankAccount {
-    name  //(e.g., "Joe's main account"), which should be determined by some input
-    #money  //which should start out as 0
-    #owner //which contains a AccountOwner object containing the owner's full name, birth date, Id number. Create a class for
-    #pin //which is 4-to-6 digit string
-    #transactionHistory = []
-    backupAccount
-    #countIncorrectPin = 0
+    #name;  //(e.g., "Joe's main account"), which should be determined by some input
+    #money;  //which should start out as 0
+    #owner; //which contains a AccountOwner object containing the owner's full name, birth date, Id number. Create a class for
+    #pin; //which is 4-to-6 digit string
+    #transactionHistory = [];
+    backupAccount;  //priváttá tenni
+    #countIncorrectPin = 0;
 
     constructor(money = 0, owner, pin) {
-        this.name = `${owner.fullName}'s main account`
-        this.#money = money
-        this.#owner = owner
-        this.#pin = pin
+        this.name = `${owner.fullName}'s account`;
+        this.#money = money;
+        this.owner = owner;
+        this.pin = pin;
+    }
+
+    get name() {
+        return this.#name;
+    }
+
+    set name(name) {
+        this.#name = name;
     }
 
     get owner() {
-        return this.#owner
+        return this.#owner;
     }
 
-    get money() {
-        return this.#money
+    set owner(newOwner) {
+        this.#owner = newOwner;
     }
 
-    set money(amount) {
-        this.#money = amount
-
-    }
-
-    get transactionHistory() {
-        return this.#transactionHistory
+    get money() {    //showBalance() method
+        return this.#money;
     }
 
     get backup() {
         return this.backupAccount;
     }
 
-    set backup(account) {
+    set backup(account) {  //instanceof validációt beépíteni, ha nem account peldany akkor hibát dobjon
         this.backupAccount = account;
-
     }
 
-    set pin(currentPin) {
-        if (currentPin === this.#pin && !this.isAccountToLocked()) {
-            this.#countIncorrectPin = 0;
-            let newPin = window.prompt("new pin")
-            if (this.validatePin(newPin)) {
-                this.#pin = newPin
-            }
-        } else if (!this.isAccountToLocked()) {
-            this.#countIncorrectPin++
-            throw TypeError("Incorrect pin")
-        } else {
-            throw TypeError("BankAccount locks down")
-        }
+    get transactionHistory() {
+        return this.#transactionHistory;
     }
 
-
-    showBalance() {
-        return this.#money
-    }
-
-
-    isAccountToLocked() {
-        return this.#countIncorrectPin > 3;
+    set pin(newPin) {
+        if (this.validatePin(newPin)) {
+            this.#pin = newPin;
+        } else throw new Error("Wrong format")
     }
 
 
     validatePin(newPin) {
-        if (newPin.length >= 4 && newPin.length <= 6) {
-            return true
-        }
-        throw TypeError("Wrong format!")
+        return newPin.length >= 4 && newPin.length <= 6
     }
+
 
     withdraw(amount) {
         let newTransaction = {
-            action: "withdraw",
+            action: "withdraw",   //új transaction osztályt létrehozni és a példányt belepusholni a historyba
             amount: amount,
             date: new Date()
-        }
-        this.#transactionHistory.push(newTransaction)
-        this.#money = this.#money - amount
+        };
+        this.#transactionHistory.push(newTransaction);
+        this.#money -= amount;
     }
 
     deposit(amount) {
@@ -88,26 +73,52 @@ export class BankAccount {
             action: "deposit",
             amount: amount,
             date: new Date()
-        }
-        this.#transactionHistory.push(newTransaction)
-        this.#money = this.#money + amount
+        };
+        this.#transactionHistory.push(newTransaction);
+        this.#money += amount;
     }
 
     transfer() {
-        let different = this.backup.money - this.money
+        let different = 0 - this.money
         if (this.money < 0 && this.backup.money >= different) {
             let newTransaction = {
-                action: "transfer",
-                amount: different,
+                action: "transfer",                                 //ez a withdrawot átírni, nézze hogy elég pénz van e a számlán a tranzakció végrehajtásához, ha nincs akkkor vegye le a backup accountrol ha van
+                amount: Math.abs(different),
                 date: new Date()
-            }
-            this.#transactionHistory.push(newTransaction)
-            this.backup.#money = this.backup.money - this.money
-            this.#money = 0
+            };
+            this.#transactionHistory.push(newTransaction);
+            this.backup.money = this.backup.money - newTransaction.amount;
+            this.#money = 0;
         }
-
     }
 
+    isAccountToLocked() {
+        return this.#countIncorrectPin >= 3;
+    }
+
+    changePin() {  //elmenteni localstorageba a countincorrect pin számláló állását és chekkolni minden futtatáskor
+        while (!this.isAccountToLocked()) {
+            if (window.prompt("Give me your currently pin") === this.#pin) {
+                this.#countIncorrectPin = 0;
+                let newPin = window.prompt("new pin")
+                while (!this.validatePin(newPin)) {
+                    window.alert("Wrong format, Try again!")
+                    newPin = window.prompt("new pin")
+                }
+                window.alert("Your pin has been changed!")
+                break;
+            } else {
+                this.#countIncorrectPin++;
+                let choice = 3 - this.#countIncorrectPin;
+                window.alert(`Incorrect pin. You have ${choice} choice`);
+                if (choice === 0) {
+                    window.alert("BankAccount locks down");
+                    break;
+                }
+            }
+
+        }
+    }
 
 }
 
