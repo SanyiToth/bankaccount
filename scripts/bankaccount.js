@@ -1,4 +1,6 @@
-export class BankAccount {
+import {Transaction} from "./transaction.js";
+
+export class  BankAccount {
     #name;  //(e.g., "Joe's main account"), which should be determined by some input
     #money;  //which should start out as 0
     #owner; //which contains a AccountOwner object containing the owner's full name, birth date, Id number. Create a class for
@@ -32,6 +34,10 @@ export class BankAccount {
 
     get money() {    //showBalance() method
         return this.#money;
+    }
+
+    set money(amount){
+        this.#money=amount;
     }
 
     get backup() {
@@ -81,13 +87,8 @@ export class BankAccount {
     transfer() {
         let different = 0 - this.money
         if (this.money < 0 && this.backup.money >= different) {
-            let newTransaction = {
-                action: "transfer",                                 //ez a withdrawot átírni, nézze hogy elég pénz van e a számlán a tranzakció végrehajtásához, ha nincs akkkor vegye le a backup accountrol ha van
-                amount: Math.abs(different),
-                date: new Date()
-            };
-            this.#transactionHistory.push(newTransaction);
-            this.backup.money = this.backup.money - newTransaction.amount;
+            this.#transactionHistory.push(new Transaction("transfer", Math.abs(different), new Date()));
+            this.backup.money = this.backup.money - Math.abs(different)
             this.#money = 0;
         }
     }
