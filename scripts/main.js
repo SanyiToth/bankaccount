@@ -9,7 +9,7 @@ let account = new BankAccount(5000, accountOwner, "1234");
 
 
 //3
-console.log(account.money);
+/*console.log(account.money);
 account.deposit(5000);
 console.log(account.money);
 //4,5
@@ -17,17 +17,17 @@ account.withdraw(2000);
 console.log(account.money);
 
 //6
-console.log(account.transactionHistory)
+console.log(account.transactionHistory)*/
 
 //Bonus
 
-let backupAccount = new BankAccount(5000, accountOwner, "4567");
+/*let backupAccount = new BankAccount(5000, accountOwner, "4567");
 account.backup = backupAccount;
 console.log("money main",account.money);
 console.log("money backup",account.backup.money);
 account.withdraw(12900)
 console.log("money main",account.money);
-console.log("money backup",account.backup.money);
+console.log("money backup",account.backup.money);*/
 
 
 /*account.backup = backupAccount;
@@ -41,7 +41,7 @@ console.log("account.transactionHistory",account.transactionHistory);*/
 
 
 //Bonus2
-/*account.changePin()
 account.changePin()
-console.log(account)*/
+
+
 
