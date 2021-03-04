@@ -1,6 +1,6 @@
 import {Transaction} from "./transaction.js";
 
-export class  BankAccount {
+export class BankAccount {
     #name;  //(e.g., "Joe's main account"), which should be determined by some input
     #money;  //which should start out as 0
     #owner; //which contains a AccountOwner object containing the owner's full name, birth date, Id number. Create a class for
@@ -36,8 +36,8 @@ export class  BankAccount {
         return this.#money;
     }
 
-    set money(amount){
-        this.#money=amount;
+    set money(amount) {
+        this.#money = amount;
     }
 
     get backup() {
@@ -63,24 +63,21 @@ export class  BankAccount {
         return newPin.length >= 4 && newPin.length <= 6
     }
 
+    validateBackUpAccount(account){
+        return account instanceof BankAccount;
+    }
+
 
     withdraw(amount) {
-        let newTransaction = {
-            action: "withdraw",   //új transaction osztályt létrehozni és a példányt belepusholni a historyba
-            amount: amount,
-            date: new Date()
-        };
-        this.#transactionHistory.push(newTransaction);
-        this.#money -= amount;
+        if (this.money >= amount) {
+            this.#transactionHistory.push(new Transaction("withdraw", amount, new Date()));
+            this.#money -= amount;
+        }
+
     }
 
     deposit(amount) {
-        let newTransaction = {
-            action: "deposit",
-            amount: amount,
-            date: new Date()
-        };
-        this.#transactionHistory.push(newTransaction);
+        this.#transactionHistory.push(new Transaction("deposit", amount, new Date()));
         this.#money += amount;
     }
 
