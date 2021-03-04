@@ -36,7 +36,7 @@ export class BankAccount {
         return this.#money;
     }
 
-    set money(amount) {
+    set money(amount) {  //ki kell javítani, nem lehet set money setter
         this.#money = amount;
     }
 
@@ -44,8 +44,10 @@ export class BankAccount {
         return this.backupAccount;
     }
 
-    set backup(account) {  //instanceof validációt beépíteni, ha nem account peldany akkor hibát dobjon
-        this.backupAccount = account;
+    set backup(account) {
+        if (this.validateBackUpAccount(account))
+            this.backupAccount = account;
+        else throw new Error("invalid format of account");
     }
 
     get transactionHistory() {
@@ -63,17 +65,26 @@ export class BankAccount {
         return newPin.length >= 4 && newPin.length <= 6
     }
 
-    validateBackUpAccount(account){
+    validateBackUpAccount(account) {
         return account instanceof BankAccount;
     }
 
-
     withdraw(amount) {
-        if (this.money >= amount) {
+        const deficit = amount - this.money;
+        let allTheMoney = this.money
+        if (this.validateBackUpAccount(this.backup) && this.money < amount && this.backup.money >= deficit) {
+            allTheMoney = this.money + this.backup.money;
+            this.backup.money -= deficit;
+            this.#transactionHistory.push(new Transaction("transfer", deficit, new Date()));
+            this.#money += deficit;
+        }
+        if (allTheMoney >= amount) {
             this.#transactionHistory.push(new Transaction("withdraw", amount, new Date()));
             this.#money -= amount;
         }
-
+        else {
+            throw new Error("not enough money")
+        }
     }
 
     deposit(amount) {
@@ -81,14 +92,6 @@ export class BankAccount {
         this.#money += amount;
     }
 
-    transfer() {
-        let different = 0 - this.money
-        if (this.money < 0 && this.backup.money >= different) {
-            this.#transactionHistory.push(new Transaction("transfer", Math.abs(different), new Date()));
-            this.backup.money = this.backup.money - Math.abs(different)
-            this.#money = 0;
-        }
-    }
 
     isAccountToLocked() {
         return this.#countIncorrectPin >= 3;

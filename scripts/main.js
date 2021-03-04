@@ -20,15 +20,24 @@ console.log(account.money);
 console.log(account.transactionHistory)
 
 //Bonus
+
 let backupAccount = new BankAccount(5000, accountOwner, "4567");
 account.backup = backupAccount;
+console.log("money main",account.money);
+console.log("money backup",account.backup.money);
+account.withdraw(12900)
+console.log("money main",account.money);
+console.log("money backup",account.backup.money);
+
+
+/*account.backup = backupAccount;
 console.log(account.backup);
 account.withdraw(9000);
 console.log(account.money);
 account.transfer();
 console.log("account.money" ,account.money);
 console.log("account.backup.money",account.backup.money);
-console.log("account.transactionHistory",account.transactionHistory);
+console.log("account.transactionHistory",account.transactionHistory);*/
 
 
 //Bonus2
