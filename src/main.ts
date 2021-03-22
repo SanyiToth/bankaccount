@@ -42,6 +42,3 @@ console.log("account.transactionHistory",account.transactionHistory);*/
 
 //Bonus2
 account.changePin()
-
-
-
