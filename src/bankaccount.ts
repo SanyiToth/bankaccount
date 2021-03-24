@@ -1,5 +1,5 @@
-import {Transaction} from "./transaction";
-import {AccountOwner} from "./accountowner";
+import {Transaction} from "./transaction.js";
+import {AccountOwner} from "./accountowner.js";
 
 export class BankAccount {
     private _name: string;  //(e.g., "Joe's main account"), which should be determined by some input
@@ -52,8 +52,8 @@ export class BankAccount {
     }
 
     withdraw(amount: number): void {
-        const deficit = amount - this.money;
-        let allTheMoney = this.money
+        const deficit: number = amount - this.money;
+        let allTheMoney: number = this.money
         if (BankAccount.validateBackUpAccount(this.backup) && this.money < amount && this.backup.money >= deficit) {
             allTheMoney = this.money + this.backup.money;
             this.backup._money -= deficit;
@@ -78,7 +78,7 @@ export class BankAccount {
         }
     }
 
-    isAccountToLocked() {
+    isAccountToLocked():boolean {
         return this._countIncorrectPin >= 3;
     }
 

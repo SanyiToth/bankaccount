@@ -1,4 +1,4 @@
-import { Transaction } from "./transaction";
+import { Transaction } from "./transaction.js";
 export class BankAccount {
     constructor(money = 0, owner, pin) {
         this._transactionHistory = [];

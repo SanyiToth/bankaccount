@@ -13,4 +13,14 @@ export class AccountOwner {
         return this._fullName;
     }
 
+    get birthDate(): Date {
+        return this._birthDate;
+    }
+
+    get idNumber(): number {
+        return this._idNumber;
+
+    }
+
+
 }

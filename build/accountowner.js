@@ -7,4 +7,10 @@ export class AccountOwner {
     get fullName() {
         return this._fullName;
     }
+    get birthDate() {
+        return this._birthDate;
+    }
+    get idNumber() {
+        return this._idNumber;
+    }
 }

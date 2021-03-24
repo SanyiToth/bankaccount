@@ -9,35 +9,30 @@ let account = new BankAccount(5000, accountOwner, "1234");
 
 
 //3
-/*console.log(account.money);
+console.log("account.money", account.money);
 account.deposit(5000);
-console.log(account.money);
+console.log("account.money after deposit", account.money);
 //4,5
 account.withdraw(2000);
-console.log(account.money);
+console.log("account.money after withdraw", account.money);
 
 //6
-console.log(account.transactionHistory)*/
+console.log("account.transactionHistory", account.transactionHistory)
 
 //Bonus
 
-/*let backupAccount = new BankAccount(5000, accountOwner, "4567");
+let backupAccount = new BankAccount(5000, accountOwner, "4567");
 account.backup = backupAccount;
-console.log("money main",account.money);
-console.log("money backup",account.backup.money);
+console.log("money main", account.money);
+console.log("money backup", account.backup.money);
+console.log("money total", account.backup.money + account.money);
 account.withdraw(12900)
-console.log("money main",account.money);
-console.log("money backup",account.backup.money);*/
+console.log("money main after withdraw", account.money);
+console.log("money backup after withdraw ", account.backup.money);
 
+account.withdraw(100);
+console.log("money backup after second withdraw ", account.backup.money);
 
-/*account.backup = backupAccount;
-console.log(account.backup);
-account.withdraw(9000);
-console.log(account.money);
-account.transfer();
-console.log("account.money" ,account.money);
-console.log("account.backup.money",account.backup.money);
-console.log("account.transactionHistory",account.transactionHistory);*/
 
 
 //Bonus2
